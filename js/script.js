@@ -1,4 +1,83 @@
 // ==============================================
+// ===============loder_container================
+// ==============================================
+document.addEventListener("DOMContentLoaded", () => {
+    const digit1 = document.querySelector(".digit_1");
+    const digit2 = document.querySelector(".digit_2");
+    const digit3 = document.querySelector(".digit_3");
+
+    for (let i = 0; i < 2; i++) {
+      for (let j = 0; j < 10; j++) {
+        const div = document.createElement("div");
+        div.className = "num";
+        div.textContent = j;
+        digit3.appendChild(div);
+      }
+    }
+
+    const finalDigit = document.createElement("div");
+    finalDigit.className = "num";
+    finalDigit.textContent = "0";
+    digit3.appendChild(finalDigit);
+
+    function animate(digit, duration, delay = 1) {
+      const numHeight = digit.querySelector(".num").clientHeight;
+      const totalDistance =
+        (digit.querySelectorAll(".num").length - 1) * numHeight;
+
+      gsap.to(digit, {
+        y: -totalDistance,
+        duration: duration,
+        delay: delay,
+        ease: "power2.inOut",
+      });
+    }
+    animate(digit3, 5);
+    animate(digit2, 6);
+    animate(digit1, 2, 5);
+
+    gsap.to(".progress_bar", {
+      width: "100%",
+      opacity: 0,
+      duration: 3,
+      delay: 8,
+      ease: "power2.inOut",
+      onComplete: () => {
+        gsap.set(".pre_loader", {
+          display: "none",
+        });
+      },
+    });
+    gsap.to(".loader_imgs > img", {
+      clipPath: "polygon(100% 0%,0% 0%,0% 100%,100% 100%)",
+      duration: 3,
+      ease: "power4.inOut",
+      stagger: 0.3,
+      delay: 9,
+    });
+    gsap.to(".loader_container", {
+      scale: 2,
+      opacity: 0,
+      duration: 3,
+      stagger: 0.2,
+      padding: 0,
+      ease: "power3.inOut",
+      delay: 14,
+      // zIndex: 0,
+      onComplete: () => {
+        gsap.set("body", {
+          overflowY: "visible",
+        });
+      },
+    });
+    gsap.to(".loader_container", {
+      duration: 1,
+      stagger: 1,
+      delay: 16,
+      zIndex: 0,
+    });
+  });
+// ==============================================
 // ================hero_container================
 // ==============================================
 const heroWrapper = document.querySelector('.hero_container');
@@ -74,8 +153,8 @@ function splitText(inputText,temp) {
             span.textContent = char;
             span.style.display = 'inline-block';
             if(temp){
-                if((index>11 && index<19) || (index>35 && index<42))span.classList.add("changeColor");
-                if((index>11 && index<19) || (index>35 && index<42))span.classList.add("changeColor");
+                if((index>11 && index<19) || (index>35 && index<43))span.classList.add("changeColor");
+                if((index>11 && index<19) || (index>35 && index<43))span.classList.add("changeColor");
                 span.style.transform = 'translateY(100vh)';
                 span.style.transition = `transform ${0.25 + index * 0.1}s cubic-bezier(0.4, 0, 0.2, 1)`;
             }
@@ -89,43 +168,40 @@ function splitText(inputText,temp) {
 const letters1 = splitText(headerText,0);
 const letters2 = splitText(scrollText,1);
 
-    // About section animation====================
-    function initializePositions() {
-        console.log("123");
+// About section animation====================
+function initializePositions() {
+    const scrollPosition = window.scrollY;
+    const letters1 = document.querySelectorAll('.about_container h1 span');
+    const varry = [40,50,10,80,80,30,45,65,15,25,60,85,5,35];
         
-        const scrollPosition = window.scrollY;
-        const aboutContainer = document.querySelector('.about_container');
-        const letters1 = document.querySelectorAll('.about_container h1 span');
-        const varry = [40,50,10,80,80,30,45,65,15,25,60,85,5,35];
+    // Set initial positions for all elements
+    letters1.forEach((span, i) => {
+        span.style.transform = `translateY(${Math.max(0,150+varry[i]+window.innerHeight*3-scrollPosition*0.5)}vh)`;
+    });
         
-        // Set initial positions for all elements
-        letters1.forEach((span, i) => {
-            span.style.transform = `translateY(${Math.max(0,150+varry[i]+window.innerHeight*3-scrollPosition*0.5)}vh)`;
-        });
-        
-        const elements = {
-            about_img_1_box: 220,
-            about_img_1: 200,
-            about_img_2_box: 210,
-            about_img_2: 190,
-            about_img_3_box: 230,
-            about_img_3: 210,
-            about_img_4_box: 200,
-            about_img_4: 180,
-            about_img_5_box: 170,
-            about_info_1: 130
-        };
+    const elements = {
+        about_img_1_box: 220,
+        about_img_1: 200,
+        about_img_2_box: 210,
+        about_img_2: 190,
+        about_img_3_box: 230,
+        about_img_3: 210,
+        about_img_4_box: 200,
+        about_img_4: 180,
+        about_img_5_box: 170,
+        about_info_1: 130
+    };
     
-        // Set initial transform for each element
-        for (const [elementId, offset] of Object.entries(elements)) {
-            const element = document.getElementById(elementId);
-            if (element) {
-                element.style.transform = `translateY(${Math.max(0,window.innerHeight-scrollPosition*0.1-offset)}vh)`;
-            }
+    // Set initial transform for each element
+    for (const [elementId, offset] of Object.entries(elements)) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.style.transform = `translateY(${Math.max(0,window.innerHeight-scrollPosition*0.1-offset)}vh)`;
         }
     }
-    document.addEventListener('DOMContentLoaded', initializePositions);
-
+}
+document.addEventListener('DOMContentLoaded', initializePositions);
+    
 // Handle scroll animation
 function handleScroll() {    
     const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;    
@@ -150,6 +226,8 @@ function handleScroll() {
     // About section animations==================
     //  triggers when card container ends
     if (scrollPosition >  aboutContainer.offsetTop) {
+        console.log(1);
+        
         let varry=[40,50,10,80,80,30,45,65,15,25,60,85,5,35];
         letters1.forEach((span, i) => {
             span.style.transform = `translateY(${Math.max(0,150+varry[i]+window.innerHeight*3-scrollPosition*0.5)}vh)`;
