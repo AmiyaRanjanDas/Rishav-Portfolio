@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // zIndex: 0,
       onComplete: () => {
         gsap.set("body", {
-          overflowY: "visible",
+          overflowY: "scroll",
         });
       },
     });
@@ -173,29 +173,42 @@ function initializePositions() {
     const scrollPosition = window.scrollY;
     const letters1 = document.querySelectorAll('.about_container h1 span');
     const varry = [40,50,10,80,80,30,45,65,15,25,60,85,5,35];
-        
+    
     // Set initial positions for all elements
     letters1.forEach((span, i) => {
         span.style.transform = `translateY(${Math.max(0,150+varry[i]+window.innerHeight*3-scrollPosition*0.5)}vh)`;
     });
-        
+    
     const elements = {
+        about_img_1_box: document.querySelector('.about_container .content .img_1'),
+        about_img_1: document.querySelector('.about_container .content .img_1 img'),
+        about_img_2_box: document.querySelector('.about_container .content .img_2'),
+        about_img_2: document.querySelector('.about_container .content .img_2 img'),
+        about_img_3_box: document.querySelector('.about_container .content .img_3'),
+        about_img_3: document.querySelector('.about_container .content .img_3 img'),
+        about_img_4_box: document.querySelector('.about_container .content .img_4'),
+        about_img_4: document.querySelector('.about_container .content .img_4 img'),
+        about_img_5_box: document.querySelector('.about_container .content .img_5'),
+        about_info_1: document.querySelector('.about_container .content .info_1')
+    };
+    
+    const offsets = {
         about_img_1_box: 220,
-        about_img_1: 200,
+        about_img_1: (window.innerWidth<768 ? 180 : 200),
         about_img_2_box: 210,
         about_img_2: 190,
         about_img_3_box: 230,
-        about_img_3: 210,
+        about_img_3: (window.innerWidth<768 ? 190 : 210),
         about_img_4_box: 200,
         about_img_4: 180,
         about_img_5_box: 170,
         about_info_1: 130
     };
-    
+
     // Set initial transform for each element
-    for (const [elementId, offset] of Object.entries(elements)) {
-        const element = document.getElementById(elementId);
+    for (const [elementId, element] of Object.entries(elements)) {
         if (element) {
+            const offset = offsets[elementId];
             element.style.transform = `translateY(${Math.max(0,window.innerHeight-scrollPosition*0.1-offset)}vh)`;
         }
     }
@@ -226,20 +239,18 @@ function handleScroll() {
     // About section animations==================
     //  triggers when card container ends
     if (scrollPosition >  aboutContainer.offsetTop) {
-        console.log(1);
-        
         let varry=[40,50,10,80,80,30,45,65,15,25,60,85,5,35];
         letters1.forEach((span, i) => {
             span.style.transform = `translateY(${Math.max(0,150+varry[i]+window.innerHeight*3-scrollPosition*0.5)}vh)`;
         });
         about_img_1_box.style.transform = `translateY(${Math.max(0,window.innerHeight-scrollPosition*0.1-220)}vh)`;
-        about_img_1.style.transform = `translateY(${Math.max(0,window.innerHeight-scrollPosition*0.1-200)}vh)`;
+        about_img_1.style.transform = `translateY(${Math.max(0,window.innerHeight-scrollPosition*0.1-(window.innerWidth<768 ? 180 : 200))}vh)`;
         
         about_img_2_box.style.transform = `translateY(${Math.max(0,window.innerHeight-scrollPosition*0.1-210)}vh)`;
         about_img_2.style.transform = `translateY(${Math.max(0,window.innerHeight-scrollPosition*0.1-190)}vh)`;
         
         about_img_3_box.style.transform = `translateY(${Math.max(0,window.innerHeight-scrollPosition*0.1-230)}vh)`;
-        about_img_3.style.transform = `translateY(${Math.max(0,window.innerHeight-scrollPosition*0.1-210)}vh)`;
+        about_img_3.style.transform = `translateY(${Math.max(0,window.innerHeight-scrollPosition*0.1-(window.innerWidth<768 ? 190 : 210))}vh)`;
 
         about_img_4_box.style.transform = `translateY(${Math.max(0,window.innerHeight-scrollPosition*0.1-200)}vh)`;
         about_img_4.style.transform = `translateY(${Math.max(0,window.innerHeight-scrollPosition*0.1-180)}vh)`;
@@ -250,26 +261,26 @@ function handleScroll() {
     
     // scroll section animations==================
     var triggerScroll=scrollContainer.offsetTop;
-    if(scrollPosition>triggerScroll-400){
+    if(scrollPosition>triggerScroll-window.innerHeight-100){
         letters2.forEach(span => {
-            span.style.transform = `translateY(${Math.max(0,2250-scrollPosition*0.4)}vh)`;
+            span.style.transform = `translateY(${Math.max(0,(window.innerWidth<768 ? 2000 : 2250)-scrollPosition*0.4)}vh)`;
         });   
     }
     if(scrollPosition>triggerScroll){
-        scrollText.style.transform=`translateX(${Math.min(0,590-scrollPosition*0.1)}vh) translateY(${Math.min(72,(scrollPosition-triggerScroll+20)*0.025)}vh)`;      
+        scrollText.style.transform=`translateX(${Math.min(0,590-scrollPosition*0.113)}vh) translateY(${Math.min(72,(scrollPosition-triggerScroll+20)*0.025)}vh)`;      
     }
-    
+
     if(scrollPosition>triggerScroll-35){     
-        scroll_layer_1.style.height=`${Math.min(100,30+(scrollPosition-triggerScroll-40)*0.2)}vh`;
+        scroll_layer_1.style.height=`${Math.min((window.innerWidth<768 ? 80 : 100),30+(scrollPosition-triggerScroll-40)*0.2)}vh`;
     }
     if(scrollPosition>triggerScroll+450){         
-        scroll_layer_2.style.height=`${Math.min(100,30+(scrollPosition-triggerScroll-700)*0.2)}vh`;
+        scroll_layer_2.style.height=`${Math.min((window.innerWidth<768 ? 80 : 100),30+(scrollPosition-triggerScroll-700)*0.2)}vh`;
     }
     if(scrollPosition>triggerScroll+650){ 
         scroll_layer_1.style.opacity=`${Math.max(0,1-(scrollPosition-triggerScroll-650)*0.002)}`;
     }
     if(scrollPosition>triggerScroll+900){     
-        scroll_layer_3.style.height=`${Math.min(100,30+(scrollPosition-triggerScroll-1250)*0.2)}vh`;
+        scroll_layer_3.style.height=`${Math.min((window.innerWidth<768 ? 80 : 100),30+(scrollPosition-triggerScroll-1250)*0.2)}vh`;
     }
     if(scrollPosition>triggerScroll+1200){ 
         scroll_layer_2.style.opacity=`${Math.max(0,1-(scrollPosition-triggerScroll-1200)*0.002)}`;
@@ -300,7 +311,11 @@ document.addEventListener("DOMContentLoaded",()=>{
 
     function setCanvasSize(canvas,ctx){
         const dpr = window.devicePixelRatio || 1;
-        canvas.width = window.innerWidth*dpr-200;
+        if (window.innerWidth < 768) {           
+            canvas.width = window.innerWidth*dpr-350;
+        }else{
+            canvas.width = window.innerWidth*dpr-200;
+        }
         canvas.height = window.innerHeight*dpr;
         canvas.style.width = `${window.innerWidth}px`;
         canvas.style.height = `${window.innerHeight}px`;
@@ -310,7 +325,12 @@ document.addEventListener("DOMContentLoaded",()=>{
     setCanvasSize(fillCanvas,fillCtx);
 
     const tringleStates = new Map();
-    const tringleSize = 150;
+    var tringleSize;
+    if (window.innerWidth < 768) {           
+        tringleSize = 100;
+    }else{
+        tringleSize = 150;
+    }
     const lineWidth = 1;
     const SCALE_THRESHOLD = 0.01;
     let animationFrameId = null;
