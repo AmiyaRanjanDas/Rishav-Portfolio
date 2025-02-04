@@ -13,7 +13,28 @@ body {
   background: var(--orange1);
   position: relative;
   overflow-x: hidden;
-  overflow-y: hidden;
+}
+
+/* =====================================
+===============scrollbar================
+===================================== */
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--white);
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--orange1);
+  border-radius: 5px;
+  border: 1px solid var(--white);
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #ba4e00;
 }
 /* =====================================
 ============loader_container============

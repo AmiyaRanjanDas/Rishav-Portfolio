@@ -2,17 +2,39 @@
 // ===============loder_container================
 // ==============================================
 document.addEventListener("DOMContentLoaded", () => {
+    // Add CSS to prevent scrolling
+    const style = document.createElement('style');
+    style.textContent = `
+        body.no-scroll {
+            overflow: hidden !important;
+            height: 100vh !important;
+            touch-action: none !important;
+            -ms-touch-action: none !important;
+            position: fixed !important;
+            width: 100% !important;
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Add no-scroll class to body
+    document.body.classList.add('no-scroll');
+    
+    // Prevent wheel and touchmove events
+    const preventDefault = (e) => e.preventDefault();
+    document.addEventListener('wheel', preventDefault, { passive: false });
+    document.addEventListener('touchmove', preventDefault, { passive: false });
+    
     const digit1 = document.querySelector(".digit_1");
     const digit2 = document.querySelector(".digit_2");
     const digit3 = document.querySelector(".digit_3");
 
     for (let i = 0; i < 2; i++) {
-      for (let j = 0; j < 10; j++) {
-        const div = document.createElement("div");
-        div.className = "num";
-        div.textContent = j;
-        digit3.appendChild(div);
-      }
+        for (let j = 0; j < 10; j++) {
+            const div = document.createElement("div");
+            div.className = "num";
+            div.textContent = j;
+            digit3.appendChild(div);
+        }
     }
 
     const finalDigit = document.createElement("div");
@@ -21,62 +43,67 @@ document.addEventListener("DOMContentLoaded", () => {
     digit3.appendChild(finalDigit);
 
     function animate(digit, duration, delay = 1) {
-      const numHeight = digit.querySelector(".num").clientHeight;
-      const totalDistance =
-        (digit.querySelectorAll(".num").length - 1) * numHeight;
+        const numHeight = digit.querySelector(".num").clientHeight;
+        const totalDistance = (digit.querySelectorAll(".num").length - 1) * numHeight;
 
-      gsap.to(digit, {
-        y: -totalDistance,
-        duration: duration,
-        delay: delay,
-        ease: "power2.inOut",
-      });
+        gsap.to(digit, {
+            y: -totalDistance,
+            duration: duration,
+            delay: delay,
+            ease: "power2.inOut",
+        });
     }
+    
     animate(digit3, 5);
     animate(digit2, 6);
     animate(digit1, 2, 5);
 
     gsap.to(".progress_bar", {
-      width: "100%",
-      opacity: 0,
-      duration: 3,
-      delay: 8,
-      ease: "power2.inOut",
-      onComplete: () => {
-        gsap.set(".pre_loader", {
-          display: "none",
-        });
-      },
+        width: "100%",
+        opacity: 0,
+        duration: 3,
+        delay: 8,
+        ease: "power2.inOut",
+        onComplete: () => {
+            gsap.set(".pre_loader", {
+                display: "none",
+            });
+        },
     });
+    
     gsap.to(".loader_imgs > img", {
-      clipPath: "polygon(100% 0%,0% 0%,0% 100%,100% 100%)",
-      duration: 3,
-      ease: "power4.inOut",
-      stagger: 0.3,
-      delay: 9,
+        clipPath: "polygon(100% 0%,0% 0%,0% 100%,100% 100%)",
+        duration: 3,
+        ease: "power4.inOut",
+        stagger: 0.3,
+        delay: 9,
     });
+    
     gsap.to(".loader_container", {
-      scale: 2,
-      opacity: 0,
-      duration: 3,
-      stagger: 0.2,
-      padding: 0,
-      ease: "power3.inOut",
-      delay: 14,
-      // zIndex: 0,
-      onComplete: () => {
-        gsap.set("body", {
-          overflowY: "scroll",
-        });
-      },
+        scale: 2,
+        opacity: 0,
+        duration: 3,
+        stagger: 0.2,
+        padding: 0,
+        ease: "power3.inOut",
+        delay: 14,
+        onComplete: () => {
+            // Remove no-scroll class
+            document.body.classList.remove('no-scroll');
+            
+            // Remove event listeners
+            document.removeEventListener('wheel', preventDefault);
+            document.removeEventListener('touchmove', preventDefault);
+        }
     });
+    
     gsap.to(".loader_container", {
-      duration: 1,
-      stagger: 1,
-      delay: 16,
-      zIndex: 0,
+        duration: 1,
+        stagger: 1,
+        delay: 16,
+        zIndex: 0,
     });
-  });
+});
 // ==============================================
 // ================hero_container================
 // ==============================================
