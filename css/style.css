@@ -19,7 +19,6 @@ body {
 ============loader_container============
 ===================================== */
 .loader_container {
-  display: none;
   position: fixed;
   z-index: 2;
   overflow: hidden;
